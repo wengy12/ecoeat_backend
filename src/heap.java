@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class heap {
-	private ArrayList<data0_o> Heap = new ArrayList<>();
+	public ArrayList<data0_o> Heap = new ArrayList<>();
 	
 	public heap() {
 		Heap.add(new data0_o("min_element", -1111111111));
