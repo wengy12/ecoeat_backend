@@ -12,6 +12,7 @@ public class Algo {
     public static ArrayList<Data> dataset_1 = new ArrayList<>();
     public static ArrayList<classificator> dataset_2 = new ArrayList<>();
 	private static HashSet<Integer> d2;
+	public static BinTree tree = new BinTree();
 
     private static int find_from_d2(String s) {
     	for (int i = 0; i < dataset_2.size(); i++) {
@@ -54,20 +55,6 @@ public class Algo {
         swap(x, i+1, r);
         return i+1; 
 	}
-    
-	private static int bin_search(ArrayList<Data> x, int l, int r, String id) {
-		if (r >= l) {
-			int mid = (l + r)/2;
-			if (x.get(mid).key.equals(id)) {
-				return mid;
-			}
-			if (x.get(mid).key.compareTo(id) > 0) {
-				return bin_search(x, l, mid-1, id);
-			}
-			return bin_search(x, mid+1, r, id);
-		}
-		return -1;
-	}
 	
 	private static boolean weak_compare(String s1, String s2) {
 		char[] ss1 = s1.toUpperCase().toCharArray();
@@ -104,20 +91,21 @@ public class Algo {
 	
 	//Function for find
 	private static String find(String id) {
-		int res = bin_search(dataset_1, 0, dataset_1.size()-1, id);
-		if (res == -1) {
-			return "WTF this product is not in the list!";
+		Data search_key = new Data(id, "junk value" , "dont have time to make it pretty");
+		Data res = tree.containsNode(search_key);
+		if (res.equal_to(new Data("no result", "very", "sad"))){
+			return "404 Error";
 		}
 		d2 = new HashSet<>();
 		int d21 = -1;
-		for (int i = 0; i < dataset_1.get(res).category.size(); i++) {
-			d21 = search_d2(dataset_1.get(res).category.get(i));
+		for (int i = 0; i < res.category.size(); i++) {
+			d21 = search_d2(res.category.get(i));
 			if (d21 != -1) {
 				d2.add(d21);
 				//System.out.println(dataset_1.get(res).category.get(i));
 			}
 		}
-		d21 = search_d2(dataset_1.get(res).product_name);
+		d21 = search_d2(res.product_name);
 		if (d21 != -1) {
 			//System.out.println(dataset_1.get(res).product_name);
 			d2.add(d21);
@@ -133,7 +121,7 @@ public class Algo {
 		return r;
 	}
 	
-    //Fucking call this function PLIZZZZZZ
+    //initialization
     public static void init() throws IOException {
         java.io.BufferedReader in1 = new BufferedReader(new FileReader(".\\src\\big_dataset.csv"));
         ArrayList<String> lines = new ArrayList<>();
@@ -237,6 +225,7 @@ public class Algo {
             dataset_2.set(k, dataset_2.get(k).insert(n, gps, cps));
         }
         sort(dataset_1);
+        tree.root = tree.build_tree(dataset_1, 0, dataset_1.size()-1);
     }
 
     public static void main(String[] args) throws IOException{
